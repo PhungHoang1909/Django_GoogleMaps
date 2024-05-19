@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,23 +28,25 @@
     var map;
     var markers = [];
     var markerData = {{ marker_data|safe }}; 
+    var securityCameraIcon = "{% static 'images/marker.svg' %}";
 
     function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
             zoom: 12,
             center: calculateCenter(markerData) // Default center coordinates
         });
-
+    
         for (var i = 0; i < markerData.length; i++) {
             var marker = new google.maps.Marker({
                 position: {lat: markerData[i].lat, lng: markerData[i].lng},
                 map: map,
-                title: markerData[i].name 
+                title: markerData[i].name,  
+                icon: securityCameraIcon
             });
             markers.push(marker);
         }
     }
-
+    
     function calculateCenter(markerData) {
         if (markerData.length === 0) {
             // Default center if no markers are provided
@@ -65,7 +68,6 @@
     }
 
     function showMarker(locationName) {
-
         for (var i = 0; i < markers.length; i++) {
             markers[i].setAnimation(null);
         }
